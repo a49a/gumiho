@@ -1,5 +1,11 @@
 function main() {
-    echo 'hello world'
+    send
+}
+
+function send() {
+    subject="gumihoÃ·–—"
+    to_addr="rsl4@foxmail.com"
+    mail -s $subject $to_addr
 }
 
 main
