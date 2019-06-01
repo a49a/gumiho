@@ -1,0 +1,1 @@
+sed 's/..$/haha/' test 
