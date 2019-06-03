@@ -3,7 +3,7 @@ function main() {
 }
 
 function send() {
-    subject="gumihoÌáĞÑ"
+    subject="gumiho"
     to_addr="rsl4@foxmail.com"
     mail -s $subject $to_addr
 }
