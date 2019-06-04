@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 actix = "0.7"
-grpcio = "0.4"
+#grpcio = "0.4"
 toml = "0.5"
 log = "0.4"
 
