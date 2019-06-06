@@ -1,0 +1,7 @@
+message HeartBeatReq {
+    string beat = 1;
+}
+
+message HeartBeatRes {
+    string res = 1;
+}
