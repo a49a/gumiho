@@ -1,13 +1,13 @@
 syntax = "proto3"
 
-service HeartBeat {
-
+service HeartBeatService {
+  rpc HeartBeat(HeartBeatRequest) returns (HeartBeatReply);
 }
 
-message HeartBeatReq {
-    string msg = 1;
+message HeartBeatRequest {
+  string msg = 1;
 }
 
-message HeartBeatRes {
-    string msg = 1;
+message HeartBeatReply {
+  string msg = 1;
 }
