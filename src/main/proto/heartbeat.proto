@@ -1,7 +1,13 @@
+syntax = "proto3"
+
+service HeartBeat {
+
+}
+
 message HeartBeatReq {
-    string beat = 1;
+    string msg = 1;
 }
 
 message HeartBeatRes {
-    string res = 1;
+    string msg = 1;
 }

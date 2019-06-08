@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 pk_column=1
 sed -i 's/\t/\x1/g' origin
 update=`sed 's/\t/\x1/g' update`

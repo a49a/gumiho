@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 kafka_path=$1
 brokers="localhost:9092"
 topic="test"

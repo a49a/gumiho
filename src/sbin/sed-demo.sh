@@ -1,1 +1,2 @@
-sed 's/..$/haha/' test 
+#!/usr/bin/env bash
+sed 's/..$/haha/' test
