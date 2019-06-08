@@ -1,6 +1,6 @@
-syntax = "proto3"
+syntax = "proto3";
 
-service HeartBeatService {
+service MonitorService {
   rpc HeartBeat(HeartBeatRequest) returns (HeartBeatReply);
 }
 
