@@ -1,2 +1,2 @@
 # gumiho
-inspired by zk
+bigdata developer tool
