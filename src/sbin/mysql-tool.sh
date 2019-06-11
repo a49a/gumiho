@@ -5,7 +5,7 @@ USER="foo"
 PASSWORD="foo"
 DB="foo"
 TABLE="foo"
-updated_at="update_time"
+updated_field="update_time"
 
 #$1表明,$2增量更新字段
 incremental_sync() {
@@ -22,6 +22,11 @@ get_update_field() {
     mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL}
 }
 
-
-
-
+get_table_size() {
+    SQL="SELECT TABLE_NAME, \
+    concat(truncate(DATA_LENGTH/1024/1024/1024, 4), 'GB') as data_size, \
+    concat(truncate(INDEX_LENGTH/1024/1024/1024, 4), 'GB') as idx_size \
+    FROM information_schema.TABLES \
+    order by DATA_LENGTH desc;"
+    mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL}
+}
