@@ -27,6 +27,14 @@ object SparkUtils {
             y
         })
     }
+    //追加每天增量
+    def appendIncr(full: RDD[String], incr: RDD[String])= {
+        full.union(incr)
+    }
+    //根据主健合并每天增量
+    def mergeIncr(full: RDD[String], incr: RDD[String], pkIndex: Int) = {
+
+    }
 
     def main(args: Array[String]) = {
     }

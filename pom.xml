@@ -49,5 +49,18 @@
       <artifactId>spark-core_${scala.bin.version}</artifactId>
       <version>${spark.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.bin.version}</artifactId>
+      <version>${spark.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.16</version>
+    </dependency>
+
   </dependencies>
 </project>
