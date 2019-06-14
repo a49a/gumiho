@@ -4,8 +4,8 @@ import java.util.Properties
 
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
-object SparkSQLUtils {
-    def sessionDevFactory(appName: String, master: String = "local[*]") = {
+object SparkSqlUtils {
+    def sessionDevFactory(appName: String = "foo", master: String = "local[*]") = {
         SparkSession
             .builder()
             .appName(appName)
