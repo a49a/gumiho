@@ -4,8 +4,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 object SparkUtils {
-    def scFactory(appName: String = "foo", master: String = "local[*]") = {
-        val conf = new SparkConf().setAppName(appName).setMaster(master)
+    def contextFactory(appName: String = "foo") = {
+        val conf = new SparkConf()
+            .setAppName(appName)
+            .setIfMissing("spark.master","local[*]")
+            .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         new SparkContext(conf)
     }
 

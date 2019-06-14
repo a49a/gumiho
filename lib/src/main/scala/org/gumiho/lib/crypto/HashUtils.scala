@@ -1,4 +1,4 @@
-package org.gumiho.lib
+package org.gumiho.lib.crypto
 
 import java.security.MessageDigest
 
