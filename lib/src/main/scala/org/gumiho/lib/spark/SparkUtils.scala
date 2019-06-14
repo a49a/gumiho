@@ -4,14 +4,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 object SparkUtils {
-    def contextFactory(appName: String = "foo") = {
-        val conf = new SparkConf()
-            .setAppName(appName)
-            .setIfMissing("spark.master","local[*]")
-            .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-        new SparkContext(conf)
-    }
-
     def readLocalTextFile(sc: SparkContext, path: String) = {
         val file = sc.textFile(path)
         split(file, "\t")
@@ -35,8 +27,14 @@ object SparkUtils {
         full.union(incr)
     }
     //根据主健合并每天增量
-    def mergeIncr(full: RDD[String], incr: RDD[String], pkIndex: Int) = {
-
+    def mergeIncr(full: RDD[(String, Array[String])], incr: RDD[(String, Array[String])]) = {
+        val joined = full.fullOuterJoin(incr)
+        joined.map(x => {
+            x._2._2 match {
+                case None => x._2._1.get
+                case Some(value) => value
+            }
+        })
     }
 
     def main(args: Array[String]) = {

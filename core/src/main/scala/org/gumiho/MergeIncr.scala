@@ -11,7 +11,9 @@ object MergeIncr {
         val leftRdd = leftDas.genKV()
         rightDas.load()
         val rightRdd = rightDas.genKV()
-        val r = leftRdd.fullOuterJoin(rightRdd)
-        r.foreach(println)
+        val r = SparkUtils.mergeIncr(leftRdd, rightRdd)
+        r.foreach(x=> {
+            println(x.mkString("\01"))
+        })
     }
 }
