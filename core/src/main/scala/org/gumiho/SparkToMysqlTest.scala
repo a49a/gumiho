@@ -1,5 +1,5 @@
 package org.gumiho.util
-
+import org.gumiho.lib.spark.SparkSQLUtils
 case class Schema(
                      col1: Int,
                      col2: Int,

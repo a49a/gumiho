@@ -1,6 +1,7 @@
-package org.gumiho.util
+package org.gumiho.lib.spark
 
 import java.util.Properties
+
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 object SparkSQLUtils {
