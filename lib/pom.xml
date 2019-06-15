@@ -48,5 +48,12 @@
       <artifactId>jieba-analysis</artifactId>
       <version>1.0.2</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.electronwill.night-config/toml -->
+    <dependency>
+      <groupId>com.electronwill.night-config</groupId>
+      <artifactId>toml</artifactId>
+      <version>3.6.0</version>
+    </dependency>
+
   </dependencies>
 </project>

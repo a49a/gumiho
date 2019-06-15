@@ -1,0 +1,13 @@
+hbase:
+  config:
+    hadoop.home.dir: /foo/bin/hadoop
+    hbase.zookeeper.property.clientPort: 2181
+    hbase.zookeeper.quorum: fooa,foob
+    hbase.master: fooa:60000
+    hbase.client.pause: 500
+    hbase.client.retries.number: 500
+    hbase.rpc.timeout: 20000000
+    hbase.client.operation.timeout: 300000
+    hbase.client.scanner.timeout.period: 100000
+server:
+  port: 9999

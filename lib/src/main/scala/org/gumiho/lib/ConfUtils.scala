@@ -1,7 +1,6 @@
-package org.gumiho.util
+package org.gumiho.lib
 
 import java.util.Properties
-
 
 object ConfUtils {
     def readProperties(path: String) = {
