@@ -1,13 +1,16 @@
-package org.gumiho.util
+package org.gumiho
+
 import org.gumiho.lib.spark.SparkSqlUtils
-case class Schema(
-                     col1: Int,
-                     col2: Int,
-                     col3: Int,
-                     col4: Int
-                 )
+
 
 object SparkToMysqlTest {
+    case class Schema(
+                         col1: Int,
+                         col2: Int,
+                         col3: Int,
+                         col4: Int
+                     )
+
     def main(args: Array[String]) = {
         val spark = SparkSqlUtils.sessionDevFactory("foo")
         import spark.implicits._
