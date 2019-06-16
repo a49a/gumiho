@@ -1,5 +1,6 @@
-package org.gumiho.rest;
+package org.gumiho.rest.repository;
 
+import org.gumiho.rest.entity.Article;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

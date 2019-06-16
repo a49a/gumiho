@@ -1,6 +1,8 @@
 package org.gumiho.rest;
 
 
+import org.gumiho.rest.entity.Article;
+import org.gumiho.rest.repository.ArticleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
