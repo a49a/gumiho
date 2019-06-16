@@ -43,7 +43,6 @@
       <artifactId>spring-data-hadoop</artifactId>
       <version>2.5.0.RELEASE</version>
     </dependency>
-
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
