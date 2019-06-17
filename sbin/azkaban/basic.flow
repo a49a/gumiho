@@ -4,8 +4,9 @@ config:
 
 nodes:
   - name: jobC
-    type: noop
-    # jobC depends on jobA and jobB
+    type: command
+    conifg:
+      command: ./spark_submit.sh
     dependsOn:
       - jobA
       - jobB
