@@ -1,4 +1,4 @@
-package org.gumiho
+package org.gumiho.demo
 
 import org.gumiho.lib.spark.SparkStreamingUtils
 

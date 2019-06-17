@@ -9,7 +9,7 @@ object SparkUtils {
         split(file, "\t")
     }
 
-    def split(rdd: RDD[String], field: String = "\u0001") = {
+    def split(rdd: RDD[String], field: String = "\01") = {
         rdd.map(x => {
             x.split(field, -1)
         })
@@ -35,8 +35,5 @@ object SparkUtils {
                 case Some(value) => value
             }
         })
-    }
-
-    def main(args: Array[String]) = {
     }
 }
