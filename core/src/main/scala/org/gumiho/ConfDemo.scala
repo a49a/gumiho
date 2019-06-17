@@ -1,3 +1,5 @@
+package org.gumiho
+
 import scala.collection.JavaConverters._
 
 import org.gumiho.lib.ConfUtils
@@ -8,7 +10,6 @@ object ConfDemo {
         val iters = p.entrySet().iterator().asScala
         for (i <- iters) {
             println(i.getKey, i.getValue)
-
         }
     }
 }
