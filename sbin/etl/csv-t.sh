@@ -14,3 +14,11 @@ fi
 #r=$(awk -F "${delimiter}" 'BEGIN{i='"$pk"'} NR == FNR {arr[$i]=$i} NR != FNR{if($i in arr){print FNR}}')
 #直接打印行
 awk -F "${delimiter}" 'BEGIN{i='"$pk"'} NR == FNR {arr[$i]=$i} NR != FNR{if($i in arr){print}}' | tr "${delimiter}" '\001' > ${cleaned_file}
+
+#用于删除
+mv_tmp() {
+    if [ -f $1 ];then
+        echo '' > $1
+        mv $1 /tmp/$1
+    fi
+}
