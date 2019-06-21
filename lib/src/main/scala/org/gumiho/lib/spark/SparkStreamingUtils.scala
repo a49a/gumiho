@@ -9,6 +9,8 @@ object SparkStreamingUtils {
             .setAppName(appName)
             .setIfMissing("spark.master","local[*]")
             .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-        new StreamingContext(conf, Seconds(seconds))
+        val ssc = new StreamingContext(conf, Seconds(seconds))
+        ssc.checkpoint("checkpoint")
+        ssc
     }
 }

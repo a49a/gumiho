@@ -1,9 +1,8 @@
-package org.gumiho
+package org.gumiho.demo.spark
 
 import org.gumiho.lib.spark.SparkSqlUtils
 
-
-object SparkToMysqlTest {
+object MysqlSaver {
     case class Schema(
                          col1: Int,
                          col2: Int,
