@@ -8,6 +8,7 @@
     <module>lib</module>
     <module>core</module>
     <module>rest</module>
+    <module>monitor</module>
   </modules>
   <properties>
 

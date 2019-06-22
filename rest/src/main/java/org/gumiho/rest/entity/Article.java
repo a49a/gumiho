@@ -3,7 +3,7 @@ package org.gumiho.rest.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "foo_article")
+//@Table(name = "foo_article")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
