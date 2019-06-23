@@ -1,5 +1,6 @@
 package org.gumiho
 
+import org.apache.spark.ml.clustering.KMeans
 import org.apache.spark.ml.linalg.Vectors
 import org.gumiho.lib.spark.SparkSqlUtils
 
@@ -14,5 +15,8 @@ object MlDemo {
         )
         import spark.implicits._
         val df = data.map(Tuple1.apply).toDF()
+
+        val kmeans = new KMeans().setK(2).setSeed(1L)
+        val model = kmeans.fit(df)
     }
 }
