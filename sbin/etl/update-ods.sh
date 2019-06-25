@@ -86,7 +86,7 @@ is_LF_at_last() {
     if [[ -z ${last_line} ]]; then
         echo "true"
     else
-        res=`tail -n1 ${file_path} | wc -l`
+        res=`tail -n 1 ${file_path} | wc -l`
         if [[ ${res} == "1" ]]; then
             echo "true"
         else
@@ -120,7 +120,7 @@ update_tables() {
         exit 1
     fi
     current_day=$(cat ${meta_dir}/current_day | grep ${now_day})
-    if [[  -z ${current_day} ]]; then
+    if [[ -z ${current_day} ]]; then
         echo "${current_date} :${now_day} dwd merged complete or be merging"
         exit 1
     fi
@@ -128,7 +128,22 @@ update_tables() {
     start_time=$(date +"%s")
     s_start_time=$(date +"%s")
     tables=get_tables
-
+    for table in ${tables};do
+        echo "start update ${table} ... "
+        pk=$(get_pk ${table})
+        ods_table_files="{${table}.txt,${table}_2019*}"
+        download ${ods_table_files} ${table}
+        full_table=${full_tmp_dir}/${table}
+        update_table=${update_tmp_dir}/${table}
+        merged_path="${full_table}_merged"
+        update_row_count=$(cat ${update_table} | wc -l 2>/dev/null)
+        echo "${current_date} :${table}表的${now_day}更新文件中有${update_row_count}条记录.."
+        if [${update_row_count} != 0];then
+            echo "TODO"
+        else
+            echo "TODO"
+        fi
+    done
 }
 
 get_using_time() {
@@ -137,14 +152,5 @@ get_using_time() {
     use_hour_remainder=$[ time_diff % 3600 ]
     use_minute=$[ use_hour_remainder / 60 ]
     use_second=$[ use_hour_remainder % 60 ]
-    echo "${use_hour}小时${use_minute}分钟${use_second}秒"
-}
-
-function use_time_cal(){
-    time_diff="$1"
-    use_hour=$(( time_diff / 3600 ))
-    use_hour_remainder=$(( time_diff % 3600 ))
-    use_minute=$(( use_hour_remainder / 60 ))
-    use_second=$(( use_hour_remainder % 60 ))
     echo "${use_hour}小时${use_minute}分钟${use_second}秒"
 }
