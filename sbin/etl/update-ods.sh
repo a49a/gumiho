@@ -5,12 +5,11 @@ hdfs_base="hdfs://"
 database="foo"
 now_day=$(date +"%Y%m%d")
 conf="${base_dir}/conf/$1.conf"
-update_conf=${base_dir}/conf/update.conf
-update_src_dir=${hdfs_base}/ods/${database}/update/${now_day}
+table_conf=${base_dir}/conf/table.conf
+update_hdfs_ods_dir=${hdfs_base}/ods/${database}/update/${now_day}
 full_dir=${hdfs_base}/dwd/${database}
 full_tmp_dir=/tmp/etl/${database}
 update_tmp_dir="${data_download_dir}/update"
-new_data_upload_dir=${hdfs_base}/tao/dwd/${database}
 delimiter="\001"
 old_delimiter="\t"
 meta_dir="${base_dir}/meta"
@@ -41,7 +40,23 @@ download() {
 }
 
 upload() {
-
+    full_file=$1
+    merged_local_file="$1_merged"
+    full_file_name=$(basename ${full_file})
+    hdfs_file="${full_dir}/upload_tmp_${full_file_name}"
+    echo "start upload local file ${merged_local_file} to ${hdfs_file} ..."
+    hdfs dfs -put ${merged_local_file} ${hdfs_file}
+    if [[ $? == "0" ]]; then
+        hdfs dfs -test -e ${full_dir}/${full_file_name}
+        if [[ $? == "0" ]]; then
+            hdfs dfs -test -e "${full_dir}/${full_file_name}.bak"
+            if [[ $? == "0" ]]; then
+                hdfs dfs -rm "${full_dir}/${full_file_name}.bak"
+            fi
+            hdfs dfs -mv "${full_dir}/${file_name}" "${full_dir}/${full_file_name}.bak"
+        fi
+        hdfs dfs -mv "${remote_file}" "${full_dir}/${full_file_name}"
+    fi
 }
 
 clean_tmp() {
@@ -61,4 +76,75 @@ clean_tmp() {
         echo '' > ${merged_file}
         mv ${merged_file} /tmp/${1}
     fi
+}
+
+# 判断文件最后一行是否有换行
+is_LF_at_last() {
+    file_path=${1}
+    last_line=`get_last_line_from_file ${file_path}`
+    # 空文件默认认为它有换行符
+    if [[ -z ${last_line} ]]; then
+        echo "true"
+    else
+        res=`tail -n1 ${file_path} | wc -l`
+        if [[ ${res} == "1" ]]; then
+            echo "true"
+        else
+            echo "false"
+        fi
+    fi
+}
+
+get_tables() {
+    tables=$(cat ${table_conf} | awk -F '=' '{print $1}')
+    echo $tables
+}
+
+# 根据表名从update_conf文件获取主键索引（从1开始)
+get_pk() {
+    table_name=$1
+    echo $(cat ${table_conf} | awk -F '=' '{ if( $1=="'"$table_name"'" ) print $2}')
+}
+
+# 获取文件最后一行
+get_last_line() {
+    file_path=$1
+    echo $(tail -n 1 ${file_path})
+}
+
+update_tables() {
+    current_date=`date +"%Y-%m-%d %H:%M:%S"`
+    hdfs dfs -test -e ${update_hdfs_ods_dir}
+    if [[ $? != 0 ]]; then
+        echo "${current_date} :${now_day} ods updated data have not extracted complete!"
+        exit 1
+    fi
+    current_day=$(cat ${meta_dir}/current_day | grep ${now_day})
+    if [[  -z ${current_day} ]]; then
+        echo "${current_date} :${now_day} dwd merged complete or be merging"
+        exit 1
+    fi
+    echo "${now_day}" > ${meta_dir}/current_day
+    start_time=$(date +"%s")
+    s_start_time=$(date +"%s")
+    tables=get_tables
+
+}
+
+get_using_time() {
+    time_diff=$1
+    use_hour=$[ time_diff / 3600 ]
+    use_hour_remainder=$[ time_diff % 3600 ]
+    use_minute=$[ use_hour_remainder / 60 ]
+    use_second=$[ use_hour_remainder % 60 ]
+    echo "${use_hour}小时${use_minute}分钟${use_second}秒"
+}
+
+function use_time_cal(){
+    time_diff="$1"
+    use_hour=$(( time_diff / 3600 ))
+    use_hour_remainder=$(( time_diff % 3600 ))
+    use_minute=$(( use_hour_remainder / 60 ))
+    use_second=$(( use_hour_remainder % 60 ))
+    echo "${use_hour}小时${use_minute}分钟${use_second}秒"
 }
