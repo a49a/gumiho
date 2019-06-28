@@ -30,3 +30,4 @@ get_table_size() {
     order by DATA_LENGTH desc;"
     mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL}
 }
+

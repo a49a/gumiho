@@ -2,7 +2,7 @@
 
 base_dir=$(cd `dirname $0`;pwd)
 hdfs_base="hdfs://"
-database="foo"
+database=${1}
 now_day=$(date +"%Y%m%d")
 conf="${base_dir}/conf/$1.conf"
 table_conf=${base_dir}/conf/table.conf
@@ -14,6 +14,18 @@ delimiter="\001"
 old_delimiter="\t"
 meta_dir="${base_dir}/meta"
 
+is_first=`cat ${meta_dir}/is_first | grep 1`
+# 首次更新
+if [[ ${is_first} == '1' ]]; then
+    delimiter="\t"
+    full_dir=${hdfs_base}/tao/ods/${database}/full
+    echo "正在进行${database}首次更新..."
+fi
+
+if [[ ! -d "${meta_dir}" ]]; then
+    mkdir -p ${meta_dir}
+fi
+
 download() {
     full_hdfs_path="${full_dir}/$1"
     full_tmp_path="${full_tmp_dir}/$2"
@@ -22,7 +34,7 @@ download() {
     if [[ ! -d "${full_tmp_dir}" ]]; then
         mkdir -p ${full_tmp_dir}
     fi
-    if [ ! -d "${update_tmp_dir}" ]; then
+    if [[ ! -d "${update_tmp_dir}" ]]; then
         mkdir -p ${update_tmp_dir}
     fi
     if [[ -f "${full_tmp_path}" ]];then
@@ -36,7 +48,13 @@ download() {
     echo "download file from ${full_hdfs_path} to local path ${full_tmp_path} ..."
     hdfs dfs -getmerge ${full_hdfs_path}  ${full_tmp_path}
     echo "download update file from ${update_hdfs_path} to local path ${update_tmp_path} ..."
-    hdfs dfs -cat ${update_hdfs_path} | tr "${old_delimiter}" "${delimiter}" > ${update_tmp_path}
+    if [[ ${is_first} == '1' ]]; then
+        #首次更新
+        hdfs dfs -get ${update_hdfs_path} ${update_tmp_path}
+    else
+        #非首次更新
+        hdfs dfs -cat ${update_hdfs_path} | tr "${old_delimiter}" "${delimiter}" > ${update_tmp_path}
+    fi
 }
 
 upload() {
@@ -79,7 +97,7 @@ clean_tmp() {
 }
 
 # 判断文件最后一行是否有换行
-is_LF_at_last() {
+has_LF_at_last() {
     file_path=${1}
     last_line=`get_last_line_from_file ${file_path}`
     # 空文件默认认为它有换行符
@@ -131,15 +149,39 @@ update_tables() {
     for table in ${tables};do
         echo "start update ${table} ... "
         pk=$(get_pk ${table})
-        ods_table_files="{${table}.txt,${table}_2019*}"
-        download ${ods_table_files} ${table}
-        full_table=${full_tmp_dir}/${table}
+        full_table_files="{${table}.txt,${table}_2019*}"
+        download ${full_table_files} ${table}
+        full_file=${full_tmp_dir}/${table}
         update_table=${update_tmp_dir}/${table}
-        merged_path="${full_table}_merged"
+        merged_path="${full_file}_merged"
         update_row_count=$(cat ${update_table} | wc -l 2>/dev/null)
         echo "${current_date} :${table}表的${now_day}更新文件中有${update_row_count}条记录.."
-        if [${update_row_count} != 0];then
-            echo "TODO"
+        if [[ ${update_row_count} != 0 ]]; then
+
+            awk -F "${delimiter}" 'BEGIN{
+                i="'"${pk}"'"
+            }
+            NR==FNR{
+                set[$i]=$i
+            }
+            NR!=FNR{
+                if($i in set)
+                {print}
+            }' ${update_table} ${full_table} | tr '\t' '\001' > ${merged_path}
+
+            #补全最后一行没有换行情况
+            has_LF=$(has_LF_at_last ${merged_path})
+            if [[ ${has_LF} == "false" ]]; then
+                echo "" >> ${merged_path}
+            fi
+
+            cat ${update_table} | tr '\t' '\001' >> ${merged_path}
+
+            if [[ $? != 0 ]]; then
+                echo "" > ${meta_dir}/update_deadline_date
+                exit 1
+            fi
+            upload ${full_file} ${merged_file}
         else
             echo "TODO"
         fi
