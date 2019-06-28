@@ -144,10 +144,11 @@ update_tables() {
     fi
     echo "${now_day}" > ${meta_dir}/current_day
     start_time=$(date +"%s")
-    s_start_time=$(date +"%s")
     tables=get_tables
-    for table in ${tables};do
+    for table in ${tables}; do
+        current_date=`date +"%Y-%m-%d %H:%M:%S"`
         echo "start update ${table} ... "
+        one_file_start_time=$(date +"%s")
         pk=$(get_pk ${table})
         full_table_files="{${table}.txt,${table}_2019*}"
         download ${full_table_files} ${table}
@@ -183,9 +184,25 @@ update_tables() {
             fi
             upload ${full_file} ${merged_file}
         else
-            echo "TODO"
+            echo "update file is empty..."
+            if [[ -z ${is_first} ]]; then
+                echo "is first update"
+                cat ${full_file} | tr '\t' '\001' > ${merged_path}
+                upload ${full_file} ${merged_file}
+            fi
         fi
+
+        one_file_end_time=$(date +"%s")
+        one_file_using_sec=$((one_file_end_time - one_file_start_time))
+        one_file_using_time=$(get_using_time ${one_file_using_sec})
+        wait
+        clean_tmp ${table}
+        echo ""
     done
+    end_time=$(date +"%s")
+    use_sec=$(( end_time - start_time ))
+    use_time=$(get_using_time ${use_sec})
+    echo "${use_time}"
 }
 
 get_using_time() {
