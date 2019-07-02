@@ -1,0 +1,47 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 4,
+        "byte":10485760
+      },
+      "errorLimit": {
+        "record": 10,
+        "percentage": 0.02
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "username": "${username}",
+            "password": "${password}",
+            "column": ["*"],
+            "splitPk": "${pk}",
+            "connection": [
+              {
+                "table": [
+                  "${table}"
+                ],
+                "jdbcUrl": [
+                  "jdbc:mysql://${host}:3306/${db}"
+                ]
+              }
+            ],
+            "where": "${time_field} >= '${start_time}' AND ${time_field} < '${end_time}'"
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/data/datax/${db}/",
+            "fileName": "${table}",
+            "writeMode": "truncate",
+            "fieldDelimiter": "\u0001"
+          }
+        }
+      }
+    ]
+  }
+}
