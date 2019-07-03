@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+source ./util.sh
 datax_path=
 today=$(date +%Y-%m-%d)
 db=$1
@@ -19,11 +19,6 @@ start_job() {
     -Ddb=${db}"
 }
 
-put() {
-    local_dir=/data/datax/${db}/
-    hdfs_dir=hdfs://hd/ods/${db}/
-    hdfs dfs -put -f ${local_dir}${table}__* ${hdfs_dir}${table}.txt
-}
 
 start_job
 put
