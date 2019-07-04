@@ -11,7 +11,7 @@ updated_field="update_time"
 incremental_sync() {
     time=`date +%F -d -1day`
     SQL="SELECT * FROM $1 WHERE $2 > ${time}"
-    mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL} >> "$1_${time}.csv"
+    mysql -h${HOST}-u${USER} -p${PASSWORD} ${DB} -e ${SQL} >> "$1_${time}.csv"
 }
 #$1库名
 get_update_field() {
@@ -19,7 +19,7 @@ get_update_field() {
     WHERE table_schema=$1 AND \
     column_default='CURRENT_TIMESTAMP' AND \
     extra='on update CURRENT_TIMESTAMP'"
-    mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL}
+    mysql -h${HOST}-u${USER} -p${PASSWORD} ${DB} -e ${SQL}
 }
 
 get_table_size() {
@@ -28,6 +28,6 @@ get_table_size() {
     concat(truncate(INDEX_LENGTH/1024/1024/1024, 4), 'GB') as idx_size \
     FROM information_schema.TABLES \
     order by DATA_LENGTH desc;"
-    mysql -h${HOST}-u${USER} -p{PASSWORD} ${DB} -e ${SQL}
+    mysql -h${HOST}-u${USER} -p${PASSWORD} ${DB} -e ${SQL}
 }
 
