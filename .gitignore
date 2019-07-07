@@ -35,3 +35,5 @@ crashlytics-build.properties
 fabric.properties
 
 *.zip
+
+__pycache__/
