@@ -1,0 +1,11 @@
+title = "demo"
+[[dbs]]
+host = "127.0.0.1"
+user = "foo"
+password = "bar"
+db = "1"
+[[dbs]]
+host = "127.0.0.1"
+user = "foo"
+password = "bar"
+db = "2"
