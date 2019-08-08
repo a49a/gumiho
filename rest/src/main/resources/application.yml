@@ -1,5 +1,15 @@
 spring:
   jpa.hibernate.ddl-auto: create
+  kafka:
+    consumer:
+      group-id: group-foo
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers:  127.0.0.1:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 #  datasource:
 #    url: jdbc:postgresql://localhost:5432/foo_db
 #    username: foo
@@ -20,3 +30,8 @@ hbase:
     hbase.client.scanner.timeout.period: 100000
 server:
   port: 9999
+
+kafka:
+  app:
+    topic:
+      name: topic-foo
