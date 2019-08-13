@@ -4,7 +4,7 @@ import org.apache.flink.streaming.connectors.fs.StringWriter
 import org.apache.flink.streaming.connectors.fs.bucketing.{BucketingSink, DateTimeBucketer}
 
 object FlinkSink {
-    def HdfsSink() = {
+    def getHdfsSink() = {
         val sink = new BucketingSink[String]("~/tmp/flink/")
         sink.setBucketer(new DateTimeBucketer("yyyy-MM-dd--HHmm"))
         sink.setWriter(new StringWriter[String])
