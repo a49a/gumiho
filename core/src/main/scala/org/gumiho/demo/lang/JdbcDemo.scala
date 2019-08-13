@@ -1,3 +1,5 @@
+package org.gumiho.demo.lang
+
 import java.sql.DriverManager
 
 import scala.io.Source

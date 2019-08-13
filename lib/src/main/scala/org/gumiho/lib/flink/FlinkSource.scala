@@ -5,10 +5,11 @@ import java.util.Properties
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010
+import org.apache.flink.streaming.api.scala._
 import org.gumiho.lib.FlinkEnv
 
 object FlinkSource {
-
+    //先启动 nc -lk 9999 在启动Flink可消费测试
     def getSocketTextStream(env: StreamExecutionEnvironment) = {
         val host = "localhost"
         val port = 9999

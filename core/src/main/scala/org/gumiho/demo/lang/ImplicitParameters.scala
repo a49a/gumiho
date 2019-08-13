@@ -1,4 +1,4 @@
-package org.gumiho.demo.scala
+package org.gumiho.demo.lang
 
 object ImplicitParameters {
     implicit val a: String = "foo"

@@ -1,4 +1,4 @@
-package org.gumiho.demo.scala
+package org.gumiho.demo.lang
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

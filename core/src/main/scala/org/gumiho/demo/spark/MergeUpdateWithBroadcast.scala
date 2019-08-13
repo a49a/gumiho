@@ -1,6 +1,7 @@
-package org.gumiho
+package org.gumiho.demo.spark
 
 import org.gumiho.lib.spark.{OdsDataAccessServiceImpl, SparkEnv}
+
 object MergeUpdateWithBroadcast {
     def main(args: Array[String]): Unit = {
         SparkEnv.init()

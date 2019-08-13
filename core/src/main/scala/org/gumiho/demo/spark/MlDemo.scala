@@ -1,4 +1,4 @@
-package org.gumiho
+package org.gumiho.demo.spark
 
 import org.apache.spark.ml.clustering.KMeans
 import org.apache.spark.ml.linalg.Vectors

@@ -1,6 +1,4 @@
-package org.gumiho
-
-import scala.collection.JavaConverters._
+package org.gumiho.demo.lang
 
 import org.gumiho.lib.ConfUtils
 

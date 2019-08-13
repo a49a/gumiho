@@ -1,4 +1,4 @@
-package org.gumiho
+package org.gumiho.demo.spark
 
 import org.gumiho.lib.spark.{OdsDataAccessServiceImpl, SparkEnv, SparkUtils}
 
