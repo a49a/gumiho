@@ -15,7 +15,7 @@ public class KafkaServiceImpl implements KafkaService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendInfo(String json, String topic) {
+    public void send(String json, String topic) {
         String message = System.currentTimeMillis() + topic;
         //LOG.info("topic="+topic+",message="+message);
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, json);

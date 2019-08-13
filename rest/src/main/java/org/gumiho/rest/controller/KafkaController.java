@@ -48,7 +48,7 @@ public class KafkaController {
         String json = JSON.toJSONString(msgs);
 
         try {
-            kafkaService.sendInfo(json, topic);
+            kafkaService.send(json, topic);
             // System.out.println("生产者发送消息发送[SUCCESS] :" + json);
 
             return "{\"msg\":\"200\"}";
@@ -74,7 +74,7 @@ public class KafkaController {
             try {
                 JSONObject object = JSON.parseObject(msgs);
                 //logger.error(msgs);
-                kafkaService.sendInfo(object.toString(), topic);
+                kafkaService.send(object.toString(), topic);
                 map.put("msg", "200");
                 return map;
             } catch (Exception e) {

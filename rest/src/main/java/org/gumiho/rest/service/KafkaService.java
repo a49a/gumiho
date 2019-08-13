@@ -1,5 +1,5 @@
 package org.gumiho.rest.service;
 
 public interface KafkaService {
-    void sendInfo(String json, String topic);
+    void send(String json, String topic);
 }
