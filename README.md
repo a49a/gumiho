@@ -10,3 +10,4 @@ customer learning demo
 shell合并HDFS数据脚本
 
 ## rest
+SpringBoot 整合 HBase以及Kafka生产者
