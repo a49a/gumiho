@@ -1,6 +1,7 @@
 package org.gumiho.demo.lang
 
 import org.gumiho.lib.ConfUtils
+import scala.collection.JavaConverters._
 
 object ConfDemo {
     def main(args: Array[String]): Unit = {
