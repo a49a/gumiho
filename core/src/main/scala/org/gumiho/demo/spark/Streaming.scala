@@ -1,18 +1,21 @@
 package org.gumiho.demo.spark
 
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.streaming.kafka010.{CanCommitOffsets, HasOffsetRanges, OffsetRange}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.Seconds
 import org.gumiho.lib.spark.SparkStreamingUtils
 
 object Streaming {
 
     def main(args: Array[String]): Unit = {
-        kafkaStarter()
+        Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
+
+        //kafkaStarter()
+        ordinaryStarter()
     }
 
     def kafkaStarter(): Unit = {
-        val ssc = StreamingContext.getOrCreate("/tmp/spark/checkpoint",
-            () => SparkStreamingUtils.contextFactory("foo", 4))
+        val ssc = SparkStreamingUtils.context()
         val stream = SparkStreamingUtils.kafkaDirectStreamFactory(ssc)
         val window = stream.window(Seconds(8))
         var offsetRanges = Array.empty[OffsetRange]
@@ -30,12 +33,19 @@ object Streaming {
     // nc -lk 9999不行
     //nc -l -p 9999
     def ordinaryStarter(): Unit = {
-        val ssc = StreamingContext.getOrCreate("/tmp/spark/checkpoint",
-            () => SparkStreamingUtils.contextFactory("foo", 4))
+        val ssc = SparkStreamingUtils.context()
         val lines = ssc.socketTextStream("localhost", 9999)
         val window = lines.window(Seconds(8))
         window.print()
+
+        val pairStream = window.map(x => (x, 1))
+        val countStream = pairStream.updateStateByKey(updateRunningSum)
+        countStream.print()
         ssc.start()             // Start the computation
         ssc.awaitTermination()  // Wait for the computation to terminate
+    }
+
+    def updateRunningSum(values: Seq[Int], state: Option[Int]) = {
+        Some(state.getOrElse(0) + values.size)
     }
 }

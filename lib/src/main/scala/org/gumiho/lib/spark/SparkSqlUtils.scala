@@ -41,4 +41,21 @@ object SparkSqlUtils {
             .mode(SaveMode.Overwrite)
             .jdbc(url, table, prop)
     }
+
+    def socketReadStream(spark: SparkSession) = {
+        spark.readStream
+            .format("socket")
+            .option("host", "localhost")
+            .option("port", 9999)
+            .load()
+    }
+
+    def kafkaReadStream(spark: SparkSession) = {
+        spark
+            .read
+            .format("kafka")
+            .option("kafka.bootstrap.servers", "localhost:9092")
+            .option("subscribe", "foo-topic")
+            .load()
+    }
 }

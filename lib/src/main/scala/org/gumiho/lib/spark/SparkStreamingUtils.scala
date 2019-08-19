@@ -8,6 +8,14 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
 object SparkStreamingUtils {
+
+    def context() = {
+        val ssc = StreamingContext
+            .getOrCreate("/tmp/spark/checkpoint",
+            () => SparkStreamingUtils.contextFactory("foo", 4))
+        ssc
+    }
+
     def contextFactory(appName: String = "foo", seconds: Int = 1) = {
         val conf = new SparkConf()
             .setAppName(appName)
@@ -24,7 +32,7 @@ object SparkStreamingUtils {
             "key.deserializer" -> classOf[StringDeserializer],
             "value.deserializer" -> classOf[StringDeserializer],
             "group.id" -> "foo-group",
-            "auto.offset.reset" -> "latest",
+            "auto.offset.reset" -> "earliest",
             "enable.auto.commit" -> (false: java.lang.Boolean)
         )
 
