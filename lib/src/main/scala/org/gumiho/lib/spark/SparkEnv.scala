@@ -22,7 +22,7 @@ object SparkEnv {
     private def contextFactory() = {
         val conf = new SparkConf()
             .setAppName(appName)
-            .setIfMissing("spark.master","local[*]")
+            .setIfMissing("spark.master","local[1]")
             .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         new SparkContext(conf)
     }

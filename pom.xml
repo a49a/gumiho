@@ -57,6 +57,14 @@
       <artifactId>spark-sql_${scala.bin.version}</artifactId>
       <version>${spark.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-hive -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-hive_${scala.bin.version}</artifactId>
+      <version>${spark.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming -->
     <dependency>
       <groupId>org.apache.spark</groupId>
