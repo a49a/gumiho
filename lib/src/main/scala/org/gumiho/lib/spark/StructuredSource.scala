@@ -19,6 +19,7 @@ object StructuredSource {
         spark.readStream
             .format("kafka")
             .option("kafka.bootstrap.servers", bootstrap)
+//            .option("maxOffsetsPerTrigger", 1000000)
             .option("subscribe", topics)
             .load()
     }
