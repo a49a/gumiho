@@ -30,6 +30,13 @@ object StructuredSink {
             .start()
     }
 
+    def foreachSink[T](ds: Dataset[T], mode: String = "append") = {
+        //TODO
+        ds.writeStream
+                .outputMode(mode)
+            .start()
+    }
+
     def save(df: DataFrame) = {
         val bootstrap = "localhost:9092"
         val topics = "foo-topic"
