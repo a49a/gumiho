@@ -20,6 +20,16 @@ object SparkSqlUtils {
             .getOrCreate()
     }
 
+    def hiveSparkSession(appName: String, hiveDir: String) = {
+        SparkSession
+            .builder()
+            .appName(appName)
+            .config("spark.sql.warehouse.dir", hiveDir)
+            .enableHiveSupport()
+            .getOrCreate()
+    }
+
+
     def genMysqlProp() = {
         val prop: Properties = new Properties()
         prop.put("user", "foo")
@@ -41,4 +51,5 @@ object SparkSqlUtils {
             .mode(SaveMode.Overwrite)
             .jdbc(url, table, prop)
     }
+
 }
