@@ -123,6 +123,8 @@
       <version>28.0-jre</version>
     </dependency>
   </dependencies>
+  <profiles>
+  </profiles>
   <build>
     <finalName>cat</finalName>
     <plugins>
