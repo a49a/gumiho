@@ -1,19 +1,27 @@
 package org.gumiho.demo.spark
 
+import com.alibaba.fastjson.JSON
 import org.apache.spark.sql.DataFrame
 import org.gumiho.lib.spark.{SparkSqlUtils, StructuredSink, StructuredSource}
 
 object StructuredStreaming {
     def main(args: Array[String]): Unit = {
-        memory()
+//        memory()
+        kafka()
     }
 
     def kafka() = {
         val spark = SparkSqlUtils.sessionDevFactory()
         import spark.implicits._
         val df = StructuredSource.kafkaStream(spark)
-        df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+        val ds = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
             .as[(String, String)]
+            .map(x => {
+                val msg = JSON.parseObject(x._2)
+                (msg.getInteger("index"), msg.getInteger("value"))
+            })
+        val query = StructuredSink.consoleSink(ds)
+        query.awaitTermination()
     }
 
     def console() = {
