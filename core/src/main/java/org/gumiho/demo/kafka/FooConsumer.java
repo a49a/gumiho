@@ -8,16 +8,14 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class Consumer {
+public class FooConsumer {
+    public static void main(String[] args) {
+        Logger logger = Logger.getLogger(FooConsumer.class);
+        String topicName = "foo-topic";
+        String clientId = "foo-clientid";
+        String groupId = "foo-group";
 
-    static Logger logger = Logger.getLogger(Consumer.class);
-    static String topicName = "foo-topic";
-    static String clientId = "foo-clientid";
-    static String groupId = "foo-group";
-    static Properties props = null;
-
-    static {
-        props = new Properties();
+        Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("client.id", clientId);
         props.put("group.id", groupId);
@@ -27,15 +25,10 @@ public class Consumer {
         props.put("session.timeout.ms", "30000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
-    }
-    // kafka properties
-
-    public static void main(String[] args) {
-
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<String, String>(props);
         kafkaConsumer.subscribe(Arrays.asList(topicName));
-        try {
+
+//        try {
             while (true) {
                 ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
                 for (ConsumerRecord<String, String> record : records) {
@@ -52,12 +45,13 @@ public class Consumer {
                             record.key(),
                             record.value()
                     );
+                    System.out.println(str);
                     logger.info(str);
                 }
             }
-        } finally {
-            kafkaConsumer.close();
-        }
+//        } finally {
+//            kafkaConsumer.close();
+//        }
 
     }
 }
