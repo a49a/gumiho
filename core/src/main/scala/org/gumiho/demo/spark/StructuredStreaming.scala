@@ -13,15 +13,16 @@ case class Msg(
 )
 object StructuredStreaming {
     def main(args: Array[String]): Unit = {
-        waterMark()
-//        memory()
-//        kafka()
+//        waterMark()
+        //        memory()
+        kafka()
     }
 
     def kafka() = {
         val spark = SparkSqlUtils.sessionDevFactory()
         import spark.implicits._
         val df = StructuredSource.kafkaStream(spark)
+        df.printSchema()
         val ds = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
             .as[(String, String)]
             .map(x => {

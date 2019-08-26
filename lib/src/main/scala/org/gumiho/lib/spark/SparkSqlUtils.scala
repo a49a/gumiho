@@ -20,11 +20,11 @@ object SparkSqlUtils {
             .getOrCreate()
     }
 
-    def hiveSparkSession(appName: String, hiveDir: String) = {
+    def hiveSparkSession(appName: String, dir: String) = {
         SparkSession
             .builder()
             .appName(appName)
-            .config("spark.sql.warehouse.dir", hiveDir)
+            .config("spark.sql.warehouse.dir", dir)
             .enableHiveSupport()
             .getOrCreate()
     }

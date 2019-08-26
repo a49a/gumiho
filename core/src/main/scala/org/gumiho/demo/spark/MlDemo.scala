@@ -1,6 +1,7 @@
 package org.gumiho.demo.spark
 
 import org.apache.spark.ml.clustering.KMeans
+import org.apache.spark.ml.evaluation.ClusteringEvaluator
 import org.apache.spark.ml.feature.{Bucketizer, MaxAbsScaler, MinMaxScaler, StandardScaler}
 import org.apache.spark.ml.linalg.Vectors
 import org.gumiho.lib.spark.SparkSqlUtils
@@ -39,12 +40,21 @@ object MlDemo {
             .setWithMean(true)
             .setWithStd(true)
             .fit(df2)
-        scalermodel.transform(df2).show
         val maxabs = new MaxAbsScaler()
             .setInputCol("features")
-            .setOutputCol("minmax_features").fit(df2).transform(df2).show()
+            .setOutputCol("minmax_features").fit(df2).transform(df2)
 
-        //        val kmeans = new KMeans().setK(2).setSeed(1L)
-//        val model = kmeans.fit(df)
+        val dataset = scalermodel.transform(df2).selectExpr("scaledFeatures AS features")
+        dataset.printSchema()
+        val kmeans = new KMeans().setK(2).setSeed(1L)
+        val model = kmeans.fit(dataset)
+
+        val predictions = model.transform(dataset)
+
+        val evaluator = new ClusteringEvaluator()
+        val silhouette = evaluator.evaluate(predictions)
+        println(silhouette)
+        println("center")
+        model.clusterCenters.foreach(println)
     }
 }

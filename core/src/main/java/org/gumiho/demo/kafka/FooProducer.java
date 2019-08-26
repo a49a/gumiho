@@ -23,7 +23,7 @@ public class FooProducer {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         Producer<String, String> producer = new KafkaProducer(props);
         String topic = "foo-topic";
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             Map<String, Object> map = new HashMap<>();
             map.put("index", i);
             map.put("value", 1);

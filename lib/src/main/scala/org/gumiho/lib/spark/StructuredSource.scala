@@ -21,6 +21,7 @@ object StructuredSource {
             .option("kafka.bootstrap.servers", bootstrap)
 //            .option("maxOffsetsPerTrigger", 1000000)
             .option("subscribe", topics)
+//            .option("startingOffsets", "earliest")
             .load()
     }
 }
