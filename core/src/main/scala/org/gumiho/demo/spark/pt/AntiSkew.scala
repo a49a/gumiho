@@ -1,5 +1,4 @@
-package org.gumiho.demo.spark
-
+package org.gumiho.demo.spark.pt
 
 import org.apache.spark.rdd.RDD
 import org.gumiho.lib.spark.{ClassicCase, SparkEnv}
@@ -87,9 +86,8 @@ object AntiSkew {
         }
     }
 
-
     //采样倾斜key并拆分join
-    def sampleAndSplit[T, U](leftRdd: RDD[(String, T)], rightRdd: RDD[(String, U)]) = {
+    def sampleExpand[T, U](leftRdd: RDD[(String, T)], rightRdd: RDD[(String, U)]) = {
         val counted = leftRdd
             .sample(false, 0.1)
             .map{
@@ -126,4 +124,8 @@ object AntiSkew {
         joinedSkewed.union(joinedNormal)
     }
 
+    //倾斜Key过多直接膨胀
+    def directExpand()= {
+
+    }
 }
