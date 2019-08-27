@@ -17,6 +17,7 @@
     <slf4j.version>1.7.26</slf4j.version>
     <spark.version>2.4.3</spark.version>
     <flink.version>1.8.0</flink.version>
+    <hbase.version>2.2.0</hbase.version>
     <kafka.bin.version>0.10</kafka.bin.version>
   </properties>
 
@@ -131,6 +132,12 @@
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>
       <version>3.10.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>${hbase.version}</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->

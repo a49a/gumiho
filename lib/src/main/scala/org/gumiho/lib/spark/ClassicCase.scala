@@ -1,11 +1,20 @@
-package org.gumiho.demo.spark
+package org.gumiho.lib.spark
 
-import org.gumiho.lib.spark.SparkEnv
+import org.apache.spark.rdd.RDD
 
 object ClassicCase {
 
     def main(args: Array[String]): Unit = {
-        topN()
+        SparkEnv.init()
+        val sc = SparkEnv.getContext()
+        val rdd = sc.parallelize(
+            Array(
+                ("a", 1),
+                ("a", 2),
+                ("a", 3)
+            )
+        )
+        topN(rdd, 5)
     }
 
     def mean() = {
@@ -24,18 +33,8 @@ object ClassicCase {
         }).collect().foreach(println)
     }
 
-    def topN() = {
-        val N = 5
-        SparkEnv.init()
-        val sc = SparkEnv.getContext()
-        val rdd = sc.parallelize(
-            Array(
-                ("a", 1),
-                ("a", 2),
-                ("a", 3)
-            )
-        )
-
+    def topN(rdd: RDD[(String, Int)], n: Int) = {
+        val N = n
         rdd.groupByKey()
             .map(x => {
                 x._2.toArray.sortWith(_ > _).take(N)
@@ -51,8 +50,6 @@ object ClassicCase {
                 x(0) = y(0)
                 x
             }
-        ).collect().foreach(x => {
-            println(x._2(0))
-        })
+        ).collect()
     }
 }

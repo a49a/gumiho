@@ -1,15 +1,24 @@
 package org.gumiho.demo.spark
 
 
-import org.gumiho.lib.spark.SparkEnv
+import org.apache.spark.rdd.RDD
+import org.gumiho.lib.spark.{ClassicCase, SparkEnv}
+
 import scala.collection.mutable
 import scala.util.Random
 
 object AntiSkew {
     def main(args: Array[String]): Unit = {
-
+        SparkEnv.init()
+        val sc = SparkEnv.getContext()
+        val rdd = sc.parallelize(
+            Array(
+                ("1", 1),
+                ("2", 2)
+            )
+        )
     }
-    
+
     //只适用于多个key shuffle到一个partition的情况，如果单个key数量过多，不适用。
     def makeMorePart() = {
         SparkEnv.init()
@@ -78,5 +87,43 @@ object AntiSkew {
         }
     }
 
+
+    //采样倾斜key并拆分join
+    def sampleAndSplit[T, U](leftRdd: RDD[(String, T)], rightRdd: RDD[(String, U)]) = {
+        val counted = leftRdd
+            .sample(false, 0.1)
+            .map{
+                (_._1 -> 1)
+            }
+            .reduceByKey( _ + _ )
+        val top = ClassicCase.topN(counted, 1)
+        val skewedKey = top(1)._1
+
+        val N = 10
+        val skewedRdd = leftRdd.filter(x => {
+            x._1.equals(skewedKey)
+        }).map(x => {
+            val random = new Random()
+            val prefix = random.nextInt(N)
+            (prefix + "_" + x._1 -> x._2)
+        })
+        val expandedRdd = rightRdd.filter(x => {
+            x._1.equals(skewedKey)
+        }).flatMap(x => {
+            for(i <- 0 until N) yield {
+                (i + "_" + x._1 -> x._2)
+            }
+        })
+        val joinedSkewed = skewedRdd.join(expandedRdd).map(x => {
+            (x._1.split("_", -1)(1) -> x._2)
+        })
+
+        val normalRdd = leftRdd.filter(x => {
+            !x._1.equals(skewedKey)
+        })
+        val joinedNormal = normalRdd.join(rightRdd)
+
+        joinedSkewed.union(joinedNormal)
+    }
 
 }
