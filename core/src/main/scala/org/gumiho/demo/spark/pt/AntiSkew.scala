@@ -35,7 +35,7 @@ object AntiSkew {
 
     }
 
-    //双聚合
+    //双聚合，不适用与Join类，只适用于聚合类型计算。
     def doubleAggregate() = {
         SparkEnv.init()
         val sc = SparkEnv.getContext()

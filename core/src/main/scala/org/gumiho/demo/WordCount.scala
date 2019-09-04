@@ -12,13 +12,20 @@ import org.apache.flink.streaming.connectors.fs.bucketing.{BucketingSink, DateTi
 import org.gumiho.lib.flink.FlinkSource
 import org.gumiho.lib.{FlinkEnv, FlinkSink}
 
-object FlinkDemo {
+object WordCount {
     def main(args: Array[String]): Unit = {
-        val env = FlinkEnv.getStreamEnv()
-        val stream = FlinkSource.getSocketTextStream(env)
-        stream
-                .keyBy(0)
-                .timeWindow(Time.seconds(4))
-        env.execute("hh")
+        val env = StreamExecutionEnvironment.getExecutionEnvironment
+        val text = env.socketTextStream("localhost", 9999, '\n')
+        val windowCounts = text.flatMap(x => {
+            x.split("\\s")
+        }).map(x => {
+            WordWithCount(x, 1)
+        }).keyBy("word")
+            .timeWindow(Time.seconds(5), Time.seconds(1))
+            .sum("count")
+        windowCounts.print().setParallelism(1)
+        env.execute("Socker Word Count")
     }
+
+    case class WordWithCount(word: String, count: Long)
 }

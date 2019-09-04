@@ -51,7 +51,7 @@ object StructuredStreaming {
             .groupBy(
             window($"timestamp", minutes, minutes),
             $"word"
-        ).count().sort(desc("count"))
+        ).count().sort(desc("count")).limit(5)
         val query = StructuredSink.consoleSink(wordCounts, "complete")
         query.awaitTermination()
     }
