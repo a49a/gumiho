@@ -1,8 +1,8 @@
-package org.gumiho.demo
+package org.gumiho.demo.flink
 
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.scala._
 
 object WordCount {
     def main(args: Array[String]): Unit = {

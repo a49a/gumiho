@@ -1,4 +1,4 @@
-package org.gumiho.lib
+package org.gumiho.stream
 
 import org.apache.flink.streaming.connectors.fs.StringWriter
 import org.apache.flink.streaming.connectors.fs.bucketing.{BucketingSink, DateTimeBucketer}

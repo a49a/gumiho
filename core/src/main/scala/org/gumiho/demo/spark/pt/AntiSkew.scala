@@ -86,43 +86,43 @@ object AntiSkew {
         }
     }
 
-    //采样倾斜key并拆分join
-    def sampleExpand[T, U](leftRdd: RDD[(String, T)], rightRdd: RDD[(String, U)]) = {
-        val counted = leftRdd
-            .sample(false, 0.1)
-            .map{
-                (_._1 -> 1)
-            }
-            .reduceByKey( _ + _ )
-        val top = ClassicCase.topN(counted, 1)
-        val skewedKey = top(1)._1
-
-        val N = 10
-        val skewedRdd = leftRdd.filter(x => {
-            x._1.equals(skewedKey)
-        }).map(x => {
-            val random = new Random()
-            val prefix = random.nextInt(N)
-            (prefix + "_" + x._1 -> x._2)
-        })
-        val expandedRdd = rightRdd.filter(x => {
-            x._1.equals(skewedKey)
-        }).flatMap(x => {
-            for(i <- 0 until N) yield {
-                (i + "_" + x._1 -> x._2)
-            }
-        })
-        val joinedSkewed = skewedRdd.join(expandedRdd).map(x => {
-            (x._1.split("_", -1)(1) -> x._2)
-        })
-
-        val normalRdd = leftRdd.filter(x => {
-            !x._1.equals(skewedKey)
-        })
-        val joinedNormal = normalRdd.join(rightRdd)
-
-        joinedSkewed.union(joinedNormal)
-    }
+//    //采样倾斜key并拆分join
+//    def sampleExpand[T, U](leftRdd: RDD[(String, T)], rightRdd: RDD[(String, U)]) = {
+//        val counted = leftRdd
+//            .sample(false, 0.1)
+//            .map{
+//                (_._1 -> 1)
+//            }
+//            .reduceByKey( _ + _ )
+//        val top = ClassicCase.topN(counted, 1)
+//        val skewedKey = top(1)._1
+//
+//        val N = 10
+//        val skewedRdd = leftRdd.filter(x => {
+//            x._1.equals(skewedKey)
+//        }).map(x => {
+//            val random = new Random()
+//            val prefix = random.nextInt(N)
+//            (prefix + "_" + x._1 -> x._2)
+//        })
+//        val expandedRdd = rightRdd.filter(x => {
+//            x._1.equals(skewedKey)
+//        }).flatMap(x => {
+//            for(i <- 0 until N) yield {
+//                (i + "_" + x._1 -> x._2)
+//            }
+//        })
+//        val joinedSkewed = skewedRdd.join(expandedRdd).map(x => {
+//            (x._1.split("_", -1)(1) -> x._2)
+//        })
+//
+//        val normalRdd = leftRdd.filter(x => {
+//            !x._1.equals(skewedKey)
+//        })
+//        val joinedNormal = normalRdd.join(rightRdd)
+//
+//        joinedSkewed.union(joinedNormal)
+//    }
 
     //倾斜Key过多直接膨胀
     def directExpand()= {
