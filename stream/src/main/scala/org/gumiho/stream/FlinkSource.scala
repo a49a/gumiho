@@ -3,8 +3,8 @@ package org.gumiho.stream
 import java.util.Properties
 
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema
+import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, KafkaDeserializationSchema}
+import org.apache.kafka.clients.consumer.ConsumerRecord
 
 object FlinkSource {
     //先启动 nc -lk 9999 在启动Flink可消费测试
@@ -14,19 +14,12 @@ object FlinkSource {
         env.socketTextStream(host, port)
     }
 
-    def getKafkaSourceStream(env: StreamExecutionEnvironment) = {
+    def getKafkaSourceStream() = {
         val bootstrap = "localhost:9092"
         val group = "foo-group"
-        val topic = "foo-topic"
+        val topic = "ods-foo"
         val properties = new Properties()
         properties.setProperty("bootstrap.servers", bootstrap)
         properties.setProperty("group.id", group)
-//        env.addSource(
-//                new FlinkKafkaConsumer[String](
-//                    topic,
-//                    new SimpleStringSchema(),
-//                    properties
-//                )
-//            )
     }
 }
