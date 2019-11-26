@@ -24,8 +24,8 @@ object FlinkSink {
     def getKafkaSink() = {
         val prop = new Properties()
         val schema = new KafkaSerializationSchema[String] {
-            override def serialize(t: String, aLong: java.lang.Long): ProducerRecord[Nothing, String] = {
-                new ProducerRecord("foo-dwd", t)
+            override def serialize(t: String, aLong: java.lang.Long): ProducerRecord[Array[Byte], Array[Byte]] = {
+                new ProducerRecord("foo-dwd", t.getBytes())
             }
         }
         val producer = new FlinkKafkaProducer[String](
@@ -37,5 +37,4 @@ object FlinkSink {
         producer.setWriteTimestampToKafka(true)
         producer
     }
-
 }

@@ -1,7 +1,9 @@
-package org.gumiho.stream;
+package org.gumiho.stream.lib;
 
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
+import org.gumiho.stream.ProducerStringSerializationSchema;
+
 import java.util.Properties;
 
 public class Sink {

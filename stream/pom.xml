@@ -23,6 +23,19 @@
     <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-streaming-scala -->
     <dependency>
       <groupId>org.apache.flink</groupId>
+      <artifactId>flink-table-api-java-bridge_${scala.bin.version}</artifactId>
+      <version>${flink.version}</version>
+    </dependency>
+
+    <!--UDF-->
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-table-common</artifactId>
+      <version>${flink.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-scala_${scala.bin.version}</artifactId>
       <version>${flink.version}</version>
     </dependency>
@@ -41,10 +54,18 @@
       <artifactId>flink-table-api-scala-bridge_${scala.bin.version}</artifactId>
       <version>${flink.version}</version>
     </dependency>
+
+    <!--SQL-->
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-table-planner_${scala.bin.version}</artifactId>
+      <version>${flink.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-table-planner-blink_${scala.bin.version}</artifactId>
       <version>${flink.version}</version>
     </dependency>
+
   </dependencies>
 </project>

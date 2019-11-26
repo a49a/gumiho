@@ -1,6 +1,7 @@
-package org.gumiho.stream;
+package org.gumiho.stream.lib;
 
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.gumiho.stream.ConsumerStringDeserializationSchema;
 
 import java.util.Properties;
 
