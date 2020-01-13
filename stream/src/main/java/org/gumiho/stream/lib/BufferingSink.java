@@ -10,7 +10,6 @@ import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 
-import javax.lang.model.element.TypeElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class BufferingSink implements SinkFunction<Tuple2<String, Integer>>, Che
         buffer.add(value);
         if (buffer.size() == threshold) {
             //TODO send it to sink
+            System.out.println(buffer);
             buffer.clear();
         }
     }

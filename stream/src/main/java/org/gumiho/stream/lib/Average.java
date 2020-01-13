@@ -10,17 +10,20 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 
-public class Count extends RichMapFunction<Integer, Integer> {
+public class Average extends RichMapFunction<Tuple2<String, Integer>, Double> {
 
     private transient ValueState<Tuple2<Integer, Integer>> sum;
 
     @Override
-    public Integer map(Integer input) throws Exception {
+    public Double map(Tuple2<String, Integer> input)  throws Exception {
         Tuple2<Integer, Integer> currentSum = sum.value();
-        currentSum.f0 += input;
+        if (currentSum == null) {
+            currentSum = Tuple2.of(0, 0);
+        }
+        currentSum.f0 += input.f1;
         currentSum.f1 += 1;
         sum.update(currentSum);
-        return input;
+        return (double) currentSum.f0 / currentSum.f1;
     }
 
     @Override
